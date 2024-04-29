@@ -45,20 +45,19 @@ def pantalla_jug():
     columna_label= ttk.Label(text="Columna", padding= 5, background="green", font="Arial")
     columna_label.place(x=320,y=380)
 
-    fila_entry=ttk.Entry(background="green", justify="center", font=("Arial", 14))
-    fila_entry.place(x=150, y=380, width=150, height=30)
-    columna_entry=ttk.Entry(background="green", justify="center", font=("Arial", 14))
-    columna_entry.place(x=430, y=380, width=150, height=30)
-
     Namejug1 = ttk.Entry(background="green", justify="center", font=("Arial", 14))
     Nickjug1 = ttk.Entry(background="green", justify="center", font=("Arial", 14))
     Namejug2 = ttk.Entry(background="green", justify="center", font=("Arial", 14))
     Nickjug2 = ttk.Entry(background="green", justify="center", font=("Arial", 14))
+    fila_entry=ttk.Entry(background="green", justify="center", font=("Arial", 14))
+    columna_entry=ttk.Entry(background="green", justify="center", font=("Arial", 14))
 
     Namejug1.place(x=150, y=280, width=150, height=30)
     Nickjug1.place(x=150, y=330, width=150, height=30)
     Namejug2.place(x=430, y=280,width=150, height=30)
     Nickjug2.place(x=430, y=330,width=150, height=30)
+    fila_entry.place(x=150, y=380, width=150, height=30)
+    columna_entry.place(x=430, y=380, width=150, height=30)
 
     # Botón para iniciar el juego
     Aceptar = ttk.Button(text="INICIO", command=validar, padding=5)
@@ -68,24 +67,21 @@ def pantalla_jug():
 
 # Función para validar la entrada del usuario y comenzar el juego
 def validar():
-    global Namejug1, Nickjug1, Namejug2, Nickjug2, DicJugadores, dicmatriz 
+    global Namejug1, Nickjug1, Namejug2, Nickjug2, DicJugadores, dicmatriz, fila, columna
     DicJugadores = {} 
     dicmatriz = {}
     # Variables para el tamaño de la matriz del juego
-    while True:
-        try:
-            fila = int(fila_entry)
-            columna=int(columna_entry)
-            if fila < 10 or columna < 20:
-                messagebox.showinfo("La matriz dada es muy pequeña, por favor hágala más grande.")
-            elif fila > 18 or columna > 26:
-                messagebox.showinfo("La matriz dada es demasiado grande, por favor hágala más pequeña.")
-            elif columna % 2 != 0:
-                messagebox.showinfo("Por favor, ingrese un número par de columnas.")
-            else:
-                break
-        except ValueError:
-            messagebox.showerror("DIguite un número valido")
+    try:
+        fila = int(fila_entry.get())
+        columna=int(columna_entry.get())
+        if fila < 10 or columna < 20:
+            messagebox.showinfo("La matriz dada es muy pequeña, por favor hágala más grande.")
+        elif fila > 18 or columna > 26:
+            messagebox.showinfo("La matriz dada es demasiado grande, por favor hágala más pequeña.")
+        elif columna % 2 != 0:
+            messagebox.showinfo("Por favor, ingrese un número par de columnas.")
+    except ValueError:
+        messagebox.showerror("DIguite un número valido")
 
     # Guardar información de jugadores y tamaño de la matriz en archivos de texto
     DicJugadores.update({"Jug1": Namejug1.get(), "NN1": Nickjug1.get(), "Jug2": Namejug2.get(), "NN2": Nickjug2.get()})
@@ -390,6 +386,4 @@ if __name__ == "__main__":
             cont_nave1 = 6
             cont_nave2 = 4
             cont_nave3 = 2
-            fil= dicmatriz["filas"]
-            col = dicmatriz["columnas"]
-            main(fil,col)
+            main()
