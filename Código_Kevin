@@ -8,6 +8,9 @@ matriz_juego = []
 # Lista temporal para almacenar una fila de la matriz
 submatriz = []
 # Contadores para el número de barcos de cada tipo
+cont_nave1 = 6
+cont_nave2 = 4
+cont_nave3 = 2
 
 # Variables globales para el tipo de barco seleccionado y su orientación
 selected_ship = None
@@ -119,7 +122,7 @@ def crear_tablero(fila, columna):
     global submatriz, matriz_juego
     root = tk.Tk()
     root.title("Juego de Batalla Naval")
-    root.geometry(str(fila * 40) + "x" + str(columna * 40) + "+210+0")
+    root.geometry(str(fila * 80) + "x" + str(columna * 20) + "+210+0")
     root.resizable(False, False)
     
     posy = 0
@@ -250,6 +253,7 @@ def accion_boton(x, y):
     if selected_ship is None or selected_orientation is None:
         messagebox.showerror("Por favor, seleccione el tipo de barco y su orientación.")
         return
+    archivo = open("matriz.txt", "a")
     if selected_ship == "nave3":
         # Colocar el barco de 3 celdas en la orientación seleccionada
         # Reducir el contador de barcos de 3 celdas
@@ -260,20 +264,29 @@ def accion_boton(x, y):
                         matriz_juego[x][y].config(image=nave32)
                         matriz_juego[x][y+1].config(image=nave33)
                         matriz_juego[x][y-1].config(image=nave31)
+                        archivo.write("\n")
+                        tempdic={nave32: matriz_juego[x][y], nave33: matriz_juego[x][y+1], nave31: matriz_juego[x][y-1]}
+                        archivo.write(str(tempdic))
                         cont_nave3 -= 1
             elif selected_orientation == "Arriba":
                 if x-1 >= 0 and x+1 < len(matriz_juego) and y < len(matriz_juego[x]):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x-1][y].cget("image") == "" and matriz_juego[x+1][y].cget("image") == "":
                         matriz_juego[x][y].config(image=arnave32)
                         matriz_juego[x+1][y].config(image=arnave33)
-                        matriz_juego[x-1][y].config(image=arnave31)
+                        matriz_juego[x-1][y].config(image=arnave31) 
+                        archivo.write("\n")
+                        tempdic={arnave32: matriz_juego[x][y], arnave33: matriz_juego[x+1][y], arnave31: matriz_juego[x-1][y]}
+                        archivo.write(str(tempdic))
                         cont_nave3 -= 1
             elif selected_orientation == "Abajo":
                 if x-1 >= 0 and x+1 < len(matriz_juego) and y < len(matriz_juego[x]):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x-1][y].cget("image") == "" and matriz_juego[x+1][y].cget("image") == "":
                         matriz_juego[x][y].config(image=abnave32)
                         matriz_juego[x+1][y].config(image=abnave31) 
-                        matriz_juego[x-1][y].config(image=abnave33)   
+                        matriz_juego[x-1][y].config(image=abnave33)
+                        archivo.write("\n")  
+                        tempdic={abnave32: matriz_juego[x][y], abnave33: matriz_juego[x-1][y], abnave31: matriz_juego[x+1][y]}
+                        archivo.write(str(tempdic)) 
                         cont_nave3-=1
             elif selected_orientation == "Derecha":
                 if y-1 >= 0 and y+1 < len(matriz_juego[x]):
@@ -281,6 +294,9 @@ def accion_boton(x, y):
                         matriz_juego[x][y].config(image=dnave32)
                         matriz_juego[x][y-1].config(image=dnave33)
                         matriz_juego[x][y+1].config(image=dnave31)
+                        archivo.write("\n")
+                        tempdic={dnave32: matriz_juego[x][y], dnave33: matriz_juego[x][y-1], dnave31: matriz_juego[x][y+1]}
+                        archivo.write(str(tempdic))
                         cont_nave3 -= 1
         else:
             messagebox.showerror("Ya no quedan más barcos de tipo Acorazado ")
@@ -293,24 +309,36 @@ def accion_boton(x, y):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x][y+1].cget("image") == "":
                         matriz_juego[x][y].config(image=nave21)
                         matriz_juego[x][y+1].config(image=nave22)
+                        archivo.write("\n")
+                        tempdic={nave21: matriz_juego[x][y], nave22: matriz_juego[x][y+1],}
+                        archivo.write(str(tempdic))
                         cont_nave2 -= 1
             elif selected_orientation == "Arriba":
                 if x+1 < len(matriz_juego):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x+1][y].cget("image") == "":
                         matriz_juego[x][y].config(image=arnave21)
                         matriz_juego[x+1][y].config(image=arnave22)
+                        archivo.write("\n")
+                        tempdic={arnave21: matriz_juego[x][y], arnave22: matriz_juego[x+1][y]}
+                        archivo.write(str(tempdic))
                         cont_nave2 -= 1
             elif selected_orientation == "Abajo":
                 if x-1 >= 0 < len(matriz_juego):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x-1][y].cget("image") == "":
                         matriz_juego[x][y].config(image=abnave21)
-                        matriz_juego[x-1][y].config(image=abnave22)    
+                        matriz_juego[x-1][y].config(image=abnave22) 
+                        archivo.write("\n")  
+                        tempdic={abnave21: matriz_juego[x][y], abnave22: matriz_juego[x-1][y]}
+                        archivo.write(str(tempdic))
                         cont_nave2-=1
             elif selected_orientation == "Derecha":
                 if y-1 >= 0 < len(matriz_juego[x]):
                     if matriz_juego[x][y].cget("image") == "" and matriz_juego[x][y-1].cget("image") == "":
                         matriz_juego[x][y].config(image=dnave21)
                         matriz_juego[x][y-1].config(image=dnave22)
+                        archivo.write("\n")
+                        tempdic={dnave21: matriz_juego[x][y], dnave22: matriz_juego[x][y-1]}
+                        archivo.write(str(tempdic))
                         cont_nave2 -= 1
         else:
             messagebox.showerror("Ya no quedan más barcos de tipo Crucero")
@@ -321,21 +349,35 @@ def accion_boton(x, y):
             if selected_orientation == "izquierda":
                 if matriz_juego[x][y].cget("image") == "":
                     matriz_juego[x][y].config(image=nave1)
+                    archivo.write("\n")
+                    tempdic={nave1: matriz_juego[x][y]}
+                    archivo.write(str(tempdic))
                     cont_nave1 -= 1
+                    
             elif selected_orientation == "Arriba":
                 if matriz_juego[x][y].cget("image") == "":
                     matriz_juego[x][y].config(image=arnave1)
+                    archivo.write("\n")
+                    tempdic={arnave1: matriz_juego[x][y]}
+                    archivo.write(str(tempdic))
                     cont_nave1 -= 1
             elif selected_orientation == "Abajo":
                 if matriz_juego[x][y].cget("image") == "":
                     matriz_juego[x][y].config(image=abnave1)
+                    archivo.write("\n")
+                    tempdic={abnave1: matriz_juego[x][y]}
+                    archivo.write(str(tempdic))
                     cont_nave1 -= 1
-            elif selected_orientation == "Derecha":
+            elif selected_orientation == "Derecha":                
                 if matriz_juego[x][y].cget("image") == "":
                     matriz_juego[x][y].config(image=dnave1)
+                    archivo.write("\n")
+                    tempdic={nave1: matriz_juego[x][y]}
+                    archivo.write(str(tempdic))
                     cont_nave1 -= 1
         else:
             messagebox.showerror("Ya no quedan más barcos de tipo Destructor")
+        archivo.close()
 # Funciones para seleccionar el tipo de barco y su orientación
 def seleccionar_barco(tipo):
     global selected_ship
@@ -379,11 +421,7 @@ def main():
 
     tablero.mainloop()
 
+
 if __name__ == "__main__":
     pantalla_jug() 
-    for key, value in DicJugadores.items():
-        if key.startswith("NN"):  # Comprobamos si la clave corresponde a un apodo
-            cont_nave1 = 6
-            cont_nave2 = 4
-            cont_nave3 = 2
-            main()
+    main()
